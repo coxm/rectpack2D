@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <algorithm>
 
 namespace rectpack2D {
 	using total_area_type = int;

@@ -1,79 +1,48 @@
-cmake_minimum_required(VERSION 3.2)
-include(GNUInstallDirs)
-
+cmake_minimum_required(VERSION 3.7)
 project(rectpack2D VERSION 0.0.0)
 
-set(RESULT_EXE_WORKING_DIR "${PROJECT_SOURCE_DIR}/example")
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	message("Building with Clang (${CMAKE_CXX_COMPILER}).")
-	set(CLANG ON)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	message("Building with gcc (${CMAKE_CXX_COMPILER}).")
-	set(GCC ON)
-elseif(MSVC)
-	message("Building with MSVC.")
-else()
-	message("Unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
-endif()
+option(
+  rectpack2D_BUILD_EXAMPLE
+  "Build the rectpack2D example program"
+  ${BUILD_TESTING})
 
-if(UNIX)
-	message("Building rectpack2D for UNIX systems.")
-elseif(MSVC)
-	message("Building rectpack2D for Windows systems.")
-else()
-	message("Unknown system.")
-endif()
-  
-set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
-set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-if(UNIX)
-	set(CMAKE_CXX_FLAGS
-		"${CMAKE_CXX_FLAGS} -std=gnu++1z"
-	)
-elseif(MSVC)
-	set(CMAKE_CXX_FLAGS
-		"${CMAKE_CXX_FLAGS} /Ob2 /GL /Oi /O2 /permissive- /std:c++latest"
-	)
-	
-	set(CMAKE_EXE_LINKER_FLAGS
-		"${CMAKE_EXE_LINKER_FLAGS} /LTCG"
-	)
-endif()
+add_library(rectpack2D INTERFACE)
+add_library(rectpack2D::rectpack2D ALIAS rectpack2D)
+target_include_directories(rectpack2D INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-if (CLANG)
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld ")
 
-	set(CMAKE_CXX_FLAGS
-		"${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -ftemplate-backtrace-limit=0 -fcolor-diagnostics -std=gnu++1z -stdlib=libc++ -Wno-error=unused-command-line-argument -Wno-error=missing-braces"
-	)
-endif()
+configure_package_config_file(
+  "${PROJECT_SOURCE_DIR}/rectpack2DConfig.cmake.in"
+  "${PROJECT_BINARY_DIR}/rectpack2DConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/rectpack2D"
+)
+write_basic_package_version_file(
+  "${PROJECT_BINARY_DIR}/rectpack2DConfigVersion.cmake"
+  COMPATIBILITY AnyNewerVersion
+)
+configure_file(rectpack2D.pc.in rectpack2D.pc @ONLY)
 
-add_executable(rectpack2D "example/main.cpp")
 
-if (CLANG)
-	target_link_libraries(rectpack2D c++experimental)
-elseif(GCC)
-	target_link_libraries(rectpack2D stdc++fs)
-endif()
-
-if(MSVC)
-	set_target_properties(rectpack2D 
-		PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${RESULT_EXE_WORKING_DIR}
-	)
-
-	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT rectpack2D)
-endif()
-
-if(UNIX)
-	add_custom_target(run
-		COMMAND rectpack2D
-		DEPENDS rectpack2D
-		WORKING_DIRECTORY ${RESULT_EXE_WORKING_DIR} 
-	)
-endif()
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rectpack2D
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.h")
+install(
+  FILES
+    "${PROJECT_BINARY_DIR}/rectpack2DConfig.cmake"
+    "${PROJECT_BINARY_DIR}/rectpack2DConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/rectpack2D")
+install(
+  FILES "${PROJECT_BINARY_DIR}/rectpack2D.pc"
+  DESTINATION "${CMAKE_INSTALL_DATADIR}/pkgconfig")
+export(PACKAGE rectpack2D)
+
+
+if(rectpack2D_BUILD_EXAMPLE)
+  add_subdirectory(example)
+endif()

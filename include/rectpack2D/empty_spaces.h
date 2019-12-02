@@ -29,7 +29,7 @@ namespace rectpack2D {
 
 		flipping_option flipping_mode = flipping_option::ENABLED;
 
-		empty_spaces(const rect_wh& r) {
+		empty_spaces(const rect_wh& r): current_aabb{} {
 			reset(r);
 		}
 

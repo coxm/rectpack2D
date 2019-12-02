@@ -1,0 +1,10 @@
+# Config file for the rectpack2D CMake package.
+# Here we define:
+# - rectpack2D_INCLUDE_DIRS (rectpack2D include directory path);
+# - rectpack2D_LIBRARIES    (libraries to link against when using rectpack2D).
+if(NOT rectpack2D_INCLUDE_DIRS)
+  set(rectpack2D_INCLUDE_DIRS "@CMAKE_INSTALL_INCLUDEDIR@")
+endif()
+if(NOT rectpack2D_LIBRARIES)
+  set(rectpack2D_LIBRARIES rectpack2D::rectpack2D)
+endif()

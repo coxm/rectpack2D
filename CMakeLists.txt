@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
+include(GNUInstallDirs)
 
-project(rectpack2D)
+project(rectpack2D VERSION 0.0.0)
 
 set(RESULT_EXE_WORKING_DIR "${PROJECT_SOURCE_DIR}/example")
 
@@ -72,3 +73,7 @@ if(UNIX)
 		WORKING_DIRECTORY ${RESULT_EXE_WORKING_DIR} 
 	)
 endif()
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rectpack2D
+  FILES_MATCHING PATTERN "*.h")

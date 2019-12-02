@@ -71,43 +71,31 @@ In color:
 ![6](images/atlas_tiny_color.png)
 
 ## Usage
-
-This is a header-only library.
-Just include the ``src/finders_interface.h`` and you should be good to go.
+This is a header-only library. Just include
+``include/rectpack2D/finders_interface.h`` and you should be good to go.
 
 For an example use, see ``example/main.cpp``.
 
+## Installation (Linux)
+Install with CMake:
+```bash
+mkdir build
+cd build
+cmake ..
+make install
+```
+
 ## Building the example
-
-### Windows
-
-From the repository's folder, run:
+Similar to the installation instructions, only add a `make` or
+`cmake --build .`:
 
 ```bash
 mkdir build
 cd build
-cmake -G "Visual Studio 15 2017 Win64" ..
-````
+cmake ..
+cmake --build  # Or just `make` on Linux/Mac.
+```
 
-Then just build the generated ``.sln`` file using the newest Visual Studio Preview.
-
-### Linux
-
-From the repository's folder, run:
-
-```bash
-cmake/build_example.sh Release gcc g++
-cd build/current
-ninja run
-````
-
-Or, if you want to use clang, run:
-
-```bash
-cmake/build_example.sh Release clang clang++
-cd build/current
-ninja run
-````
 
 ## Algorithm
 

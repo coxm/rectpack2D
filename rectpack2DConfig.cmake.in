@@ -8,3 +8,8 @@ endif()
 if(NOT rectpack2D_LIBRARIES)
   set(rectpack2D_LIBRARIES rectpack2D::rectpack2D)
 endif()
+if(NOT TARGET rectpack2D::rectpack2D)
+  get_filename_component(
+    rectpack2D_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+  include("${rectpack2D_CMAKE_DIR}/rectpack2DTargets.cmake")
+endif()

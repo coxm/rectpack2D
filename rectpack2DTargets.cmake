@@ -1,0 +1,5 @@
+include(GNUInstallDirs)
+install(TARGETS rectpack2D::rectpack2D
+  EXPORT rectpack2D-export
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

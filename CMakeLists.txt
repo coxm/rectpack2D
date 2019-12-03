@@ -11,10 +11,10 @@ option(
 
 
 add_library(rectpack2D INTERFACE)
-add_library(rectpack2D::rectpack2D ALIAS rectpack2D)
 target_include_directories(rectpack2D INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+add_library(rectpack2D::rectpack2D ALIAS rectpack2D)
 
 
 configure_package_config_file(
@@ -40,6 +40,18 @@ install(
 install(
   FILES "${PROJECT_BINARY_DIR}/rectpack2D.pc"
   DESTINATION "${CMAKE_INSTALL_DATADIR}/pkgconfig")
+install(TARGETS rectpack2D
+  EXPORT rectpack2D-targets
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(EXPORT rectpack2D-targets
+  FILE rectpack2DTargets.cmake
+  NAMESPACE rectpack2D::
+  DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/rectpack2D")
+export(EXPORT rectpack2D-targets
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/rectpack2DTargets.cmake"
+  NAMESPACE rectpack2D::)
 export(PACKAGE rectpack2D)
 
 
